@@ -1,0 +1,26 @@
+#!/bin/bash
+
+##!!!! make sure set --chdir to your current working directory
+
+#SBATCH --job-name=optuna_defect_detection
+
+#SBATCH --account=escience
+#SBATCH --partition=gpu-a40
+#SBATCH --gres=gpu:a40:1
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=w021glr@uw.edu
+
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=40
+#SBATCH --time=15:00:00
+
+#SBATCH --mem=150G
+#SBATCH --chdir=/mmfs1/gscratch/scrubbed/w021glr/Big_Data
+
+#SBATCH --export=all
+
+module load foster/python/miniconda/3.8
+source activate /mmfs1/gscratch/scrubbed/w021glr/Research/pytorch-cuda11
+export PYTHONPATH=$PYTHONPATH:/mmfs1/gscratch/scrubbed/w021glr/Research/pytorch-cuda11/lib/python3.8/site-packages/
+python3 -u  defect_detection_optuna.py > optimization_out.log 2> optuna_trace.log
+
